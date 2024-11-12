@@ -13,7 +13,7 @@ def html_parse(html: str) -> tuple[str, str]:
         p_list = pat.findall(html)
         p_str_list = []
         for p in p_list:
-            p_str_list.append(re.sub(r'<.+?>', '00', p))
+            p_str_list.append(re.sub(r'<.+?>', '', p))
         html_str = "\n".join(p_str_list)
 
         return html_str,'SUCCESS'
