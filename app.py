@@ -1,10 +1,22 @@
 import gradio as gr
 import traceback
-
+import re
 
 def hello_world_fn(username: str) -> tuple[str, str]:
     try:
         return f"HELLO WORLD\n{username.upper()}", "SUCCESS"
+    except Exception as e:
+        return f"opus! some exception {e}\n{traceback.format_exc()}", "FAILED"
+def html_parse(html: str) -> tuple[str, str]:
+    try:
+        pat = re.compile(r'<p>(.+)</p>')
+        p_list = pat.findall(html)
+        p_str_list = []
+        for p in p_list:
+            p_str_list.append(re.sub(r'<.+?>', '00', p))
+        html_str = "\n".join(p_str_list)
+
+        return html_str,'SUCCESS'
     except Exception as e:
         return f"opus! some exception {e}\n{traceback.format_exc()}", "FAILED"
 
@@ -41,8 +53,9 @@ def main() -> None:
 
             btn = gr.Button("开始转换")
             btn.click(
-                fn=hello_world_fn,
+                fn=html_parse,
                 inputs=raw_input,
+
                 outputs=[pack_output, status_output],
             )
 
